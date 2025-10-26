@@ -3,6 +3,8 @@
  * CS 3100
  * Project 4
  *
+ * Robert Pohl
+ *
  * This source file contains the test harness used when grading the HashTable project.
  *
  * For students: DO NOT modify this file. If you cannot get your project to compile, it is not
