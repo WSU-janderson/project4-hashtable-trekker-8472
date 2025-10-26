@@ -37,5 +37,17 @@ size_t HashTable::capacity() const {
 size_t HashTable::size() const {
 }
 
+void HashTable::resizeAndRehash() {
+}
+
+void HashTable::generateNewOffsets(size_t newCapacity) {
+}
+
+size_t HashTable::hashFunction(const string &key) const {
+}
+
+size_t HashTable::findIndex(const string &key) const {
+}
+
 ostream & operator<<(ostream &os, const HashTable &hashTable) {
 }

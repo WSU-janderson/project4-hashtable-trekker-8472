@@ -22,19 +22,19 @@ using namespace std;
  */
 class HashTableBucket;
 
-enum class BucketType {
-    NORMAL, // The bucket is non-empty and currently storing a key-value pair
-    ESS,            // Empty Since Start - the bucket has never had a key-value pair
-    EAR             // Empty After Remove - the bucket previously stored a key-value pair, but it was later removed
-};
+enum class BucetType {NORMAL, ESS, EAR};
+
 class HashTable {
+
     public:
     /**
      * Only a single constructor that takes an initial capacity for the table is
      * necessary. If no capacity is given, it defaults to 8 initially.
      */
     HashTable(size_t initCapacity = 8);
-    ~HashTable();
+    ~HashTable() = default;
+    HashTable(const HashTable& other) = default;
+    HashTable& operator=(const HashTable& other) = default;
 
     /**
      * Insert a new key-value pair into the table. Duplicate keys are NOT allowed. The
@@ -86,9 +86,9 @@ class HashTable {
     double alpha() const;
 
     /**
- * capacity returns how many buckets in total are in the hash table.
- * The time complexity for this algorithm must be O(1).
- */
+    * capacity returns how many buckets in total are in the hash table.
+    * The time complexity for this algorithm must be O(1).
+    */
     size_t capacity() const;
 
     /**
@@ -104,7 +104,56 @@ class HashTable {
      */
     friend ostream& operator<<(ostream& os, const HashTable& hashTable);
 
+    private:
+    // tableData will use a vector of HashTableBucket objects.
+    vector<HashTableBucket> tableData;
+
+    // Stores the pseudo-random probe offsets.
+    vector<size_t> offsets;
+
+    // Tracks the number of NORMAL (occupied) buckets (N) for O(1) size() and alpha()
+    size_t currentSize;
+
+    /**
+     * Resizes the table and rehashes all existing elements when the load factor
+     * (alpha) reaches or exceeds 0.5 (by doubling the size).
+     */
+    void resizeAndRehash();
+
+    /**
+     * Generates a new vector of pseudo-random probe offsets based on the new capacity.
+     */
+    void generateNewOffsets(size_t newCapacity);
+
+    /**
+     * Custom hash function to convert a string key into a home index.
+     */
+    size_t hashFunction(const string& key) const;
+
+    /**
+     * Helper to find the index of an existing key or the appropriate spot for insertion.
+     */
+    size_t findIndex(const string& key) const;
+
 };
 
+class HashTableBucket {
+    public:
+
+    /**
+    * The default constructor can simply set the bucket type to ESS.
+    *
+    */
+    HashTableBucket();
+    ~HashTableBucket();//destructor
+
+    private:
+
+    string key;
+    int value;
+    size_t capacity;
+
+
+};
 
 #endif
