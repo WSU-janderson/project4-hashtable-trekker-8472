@@ -6,6 +6,14 @@
  */
 
 #include "HashTable.h"
+#include <vector>
+#include <string>
+#include <optional>
+#include <cmath>
+#include <iostream>
+
+using namespace std;
+
 
 HashTable::HashTable(size_t initCapacity) {
 }
@@ -49,5 +57,35 @@ size_t HashTable::hashFunction(const string &key) const {
 size_t HashTable::findIndex(const string &key) const {
 }
 
+HashTableBucket::HashTableBucket(string key, int value) {
+}
+
+void HashTableBucket::load(string key, int value) {
+}
+
+void HashTableBucket::makeEAR() {
+}
+
+bool HashTableBucket::isEmpty() const {
+}
+
+bool HashTableBucket::isNormal() const {
+}
+
+BucketType HashTableBucket::getType() const {
+}
+
+const string & HashTableBucket::getKey() const {
+}
+
+int & HashTableBucket::getValue() {
+}
+
+const int & HashTableBucket::getValue() const {
+}
+
 ostream & operator<<(ostream &os, const HashTable &hashTable) {
+}
+
+ostream & operator<<(ostream &os, const HashTableBucket &bucket) {
 }

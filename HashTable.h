@@ -22,7 +22,7 @@ using namespace std;
  */
 class HashTableBucket;
 
-enum class BucetType {NORMAL, ESS, EAR};
+enum class BucketType {NORMAL, ESS, EAR};
 
 class HashTable {
 
@@ -146,6 +146,50 @@ class HashTableBucket {
     */
     HashTableBucket();
     ~HashTableBucket();//destructor
+    HashTableBucket(const HashTableBucket& other) = default; //recommended by clion
+    HashTableBucket& operator=(const HashTableBucket& other) = default; //recommended by clion
+
+    /**
+     * A parameterized constructor could initialize the key and value, as
+     * well as set the bucket type to NORMAL.
+     */
+    HashTableBucket(string key, int value);
+
+    /**
+     * A load method could load the key-value pair into the bucket, which
+     * should then also mark the bucket as NORMAL.
+     */
+    void load(string key, int value);
+
+    /**
+     * Mark the bucket as Empty After Remove (EAR).
+     */
+    void makeEAR();
+
+    /**
+     * This method would return whether the bucket is empty, regardless of
+     * if it has had data placed in it or not (i.e., ESS or EAR).
+     */
+    bool isEmpty() const;
+
+    /**
+     * Checks if the bucket is currently storing a key-value pair (NORMAL).
+     */
+    bool isNormal() const;
+
+    BucketType getType() const;
+
+    const string& getKey() const;
+    int& getValue();
+    const int& getValue() const;
+
+    /**
+     * The stream insertion operator could be overloaded to print the
+     * bucket's contents.
+     */
+    friend ostream& operator<<(ostream& os, const HashTableBucket& bucket);
+
+
 
     private:
 
