@@ -64,6 +64,46 @@ class HashTable {
      */
     optional<int> get(const string& key) const;
 
+
+    /**
+     * The bracket operator lets us access values in the map using a familiar syntax.
+     * It returns a reference to the value, which allows assignment (hashTable["key"] = 1234;).
+     * If the key is not in the table, the situation results in undefined behavior
+     * (no need to address attempts to access keys not in the table).
+     */
+    int& operator[](const string& key);
+
+    /**
+     * keys returns a std::vector with all of the keys currently in the table.
+     * The length of the vector should be the same as the size of the hash table.
+     */
+    vector<string> keys() const;
+
+    /**
+     * alpha returns the current load factor of the table, or size/capacity.
+     * The time complexity for this method must be O(1).
+     */
+    double alpha() const;
+
+    /**
+ * capacity returns how many buckets in total are in the hash table.
+ * The time complexity for this algorithm must be O(1).
+ */
+    size_t capacity() const;
+
+    /**
+     * The size method returns how many key-value pairs are in the hash table.
+     * The time complexity for this method must be O(1).
+     */
+    size_t size() const;
+
+    /**
+     * operator<< allows us to print the contents of our hash table using the normal syntax:
+     * cout << myHashTable << endl;
+     * This is not a method of HashTable, but is declared as a friend for private access.
+     */
+    friend ostream& operator<<(ostream& os, const HashTable& hashTable);
+
 };
 
 

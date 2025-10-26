@@ -21,3 +21,21 @@ bool HashTable::contains(const string &key) const {
 
 optional<int> HashTable::get(const string &key) const {
 }
+
+int & HashTable::operator[](const string &key) {
+}
+
+vector<string> HashTable::keys() const {
+}
+
+double HashTable::alpha() const {
+}
+
+size_t HashTable::capacity() const {
+}
+
+size_t HashTable::size() const {
+}
+
+ostream & operator<<(ostream &os, const HashTable &hashTable) {
+}
