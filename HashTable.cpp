@@ -25,7 +25,50 @@ HashTable::HashTable(size_t initCapacity) {
 }
 
 bool HashTable::insert(string key, int value) {
+
+
+    size_t index = hashFunction(key) % capacity();
+    size_t firstEAR = capacity(); // hold for EAR entry
+
+    for (size_t i = 0; i < capacity(); ++i) {
+        size_t probe = (index + i) % capacity();
+        HashTableBucket& bucket = tableData[probe];
+
+        if (bucket.getType() == BucketType::NORMAL && bucket.getKey() == key) {
+            // Key already exists — reject insert
+            return false;
+        }
+
+        if (bucket.getType() == BucketType::EAR && firstEAR == capacity()) {
+            // Remember first EAR slot
+            firstEAR = probe;
+        }
+
+        if (bucket.getType() == BucketType::ESS) {
+            // ESS found — insert into EAR if remembered, else here
+            size_t target = (firstEAR != capacity()) ? firstEAR : probe;
+            HashTableBucket& insertBucket = tableData[target];
+            insertBucket.setKey(key);
+            insertBucket.setValue(value);
+            insertBucket.setType(BucketType::NORMAL);
+            ++currentSize;
+            return true;
+        }
+    }
+
+    // Chain exhausted — insert into EAR if remembered
+    if (firstEAR != capacity()) {
+        HashTableBucket& insertBucket = tableData[firstEAR];
+        insertBucket.setKey(key);
+        insertBucket.setValue(value);
+        insertBucket.setType(BucketType::NORMAL);
+        ++currentSize;
+        return true;
+    }
+
+    return false; // table full, no usable slot
 }
+
 
 bool HashTable::remove(string key) {
 }
@@ -49,9 +92,36 @@ size_t HashTable::capacity() const {
 }
 
 size_t HashTable::size() const {
+    return currentSize;
 }
 
 void HashTable::resizeAndRehash() {
+
+    size_t newCapacity = capacity() * 2; //resize by double
+
+    size_t count = 0;
+    for (const auto& bucket : tableData) {
+        if (bucket.getType() == BucketType::NORMAL) {
+            ++count; // count active entries
+        }
+    }
+
+    vector<HashTableBucket> oldTable(count); // preallocate exact size
+    size_t index = 0;
+    for (const auto& bucket : tableData) {
+        if (bucket.getType() == BucketType::NORMAL) {
+            oldTable[index++] = bucket; // copy active entries
+        }
+    }
+
+    tableData = vector<HashTableBucket>(newCapacity); // allocate new table
+    currentSize = 0;
+
+    generateNewOffsets(newCapacity); // update probing logic
+
+    for (const auto& bucket : oldTable) {
+        insert(bucket.getKey(), bucket.getValue()); // reinsert with new capacity
+    }
 }
 
 void HashTable::generateNewOffsets(size_t newCapacity) {
