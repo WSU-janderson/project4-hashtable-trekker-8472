@@ -16,6 +16,12 @@ using namespace std;
 
 
 HashTable::HashTable(size_t initCapacity) {
+
+     tableData = vector<HashTableBucket>(initCapacity); // Default-constructs tableData
+     currentSize = 0; // Assigns size
+
+    generateNewOffsets(initCapacity); //generates the offsets with the table generation
+
 }
 
 bool HashTable::insert(string key, int value) {
@@ -52,10 +58,18 @@ void HashTable::generateNewOffsets(size_t newCapacity) {
 }
 
 size_t HashTable::hashFunction(const string &key) const {
+
+    auto myhash = hash<string>{}; // Create a hash function
+    size_t hash = myhash(key); // generates corned beef hash
+
+    return hash; //return value
 }
 
 size_t HashTable::findIndex(const string &key) const {
 }
+
+// Default constructor
+HashTableBucket::HashTableBucket() : value(0), type(BucketType::ESS) {}
 
 HashTableBucket::HashTableBucket(string key, int value) {
 }

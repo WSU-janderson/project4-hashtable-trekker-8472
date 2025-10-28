@@ -83,6 +83,7 @@ class HashTable {
      * alpha returns the current load factor of the table, or size/capacity.
      * The time complexity for this method must be O(1).
      */
+
     double alpha() const;
 
     /**
@@ -134,6 +135,8 @@ class HashTable {
      * Helper to find the index of an existing key or the appropriate spot for insertion.
      */
     size_t findIndex(const string& key) const;
+
+
 
 };
 
@@ -189,14 +192,10 @@ class HashTableBucket {
      */
     friend ostream& operator<<(ostream& os, const HashTableBucket& bucket);
 
-
-
-    private:
-
     string key;
     int value;
     size_t capacity;
-
+    BucketType type;
 
 };
 
