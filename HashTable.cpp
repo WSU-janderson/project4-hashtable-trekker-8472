@@ -26,6 +26,9 @@ HashTable::HashTable(size_t initCapacity) {
 
 bool HashTable::insert(string key, int value) {
 
+    if (size() * 2 >= capacity()) { //resize if at least half full
+        resizeAndRehash();
+    }
 
     size_t index = hashFunction(key) % capacity();
     size_t firstEAR = capacity(); // hold for EAR entry
@@ -89,6 +92,7 @@ double HashTable::alpha() const {
 }
 
 size_t HashTable::capacity() const {
+    return tableData.size();
 }
 
 size_t HashTable::size() const {
