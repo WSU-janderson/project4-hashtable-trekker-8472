@@ -26,7 +26,7 @@ HashTable::HashTable(size_t initCapacity) {
 
 bool HashTable::insert(string key, int value) {
 
-    if (size() * 2 >= capacity()) { //resize if at least half full
+    if (alpha() > 0.5) { //resize if at least half full
         resizeAndRehash();
     }
 
@@ -89,6 +89,7 @@ vector<string> HashTable::keys() const {
 }
 
 double HashTable::alpha() const {
+    return static_cast<double>(size()) / capacity();//size fill check
 }
 
 size_t HashTable::capacity() const {
