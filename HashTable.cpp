@@ -11,6 +11,7 @@
 #include <optional>
 #include <cmath>
 #include <iostream>
+#include <bits/locale_facets_nonio.h>
 
 using namespace std;
 
@@ -70,6 +71,21 @@ bool HashTable::insert(string key, int value) {
 
 
 bool HashTable::remove(string key) {
+    size_t index = hashFunction(key) % capacity();
+
+    for (size_t i = 0; i < capacity(); ++i) {
+        size_t probe = (index + i) % capacity();
+        HashTableBucket& bucket = tableData[probe];
+        if (bucket.getType() == BucketType::ESS) {///breaks from function since no point in continuing
+            return false;
+        }
+        if (bucket.getType() == BucketType::NORMAL && bucket.getKey() == key) {//found
+            bucket.makeEAR();
+            --currentSize;
+            return true;
+            }
+        }
+    }
 }
 
 bool HashTable::contains(const string &key) const {
