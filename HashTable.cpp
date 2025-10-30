@@ -90,7 +90,7 @@ bool HashTable::remove(string key) {
             --currentSize;
             return true;
             }
-        }
+        return false;}
     }
 }
 
@@ -98,6 +98,31 @@ bool HashTable::contains(const string &key) const {
 }
 
 optional<int> HashTable::get(const string &key) const {
+    // Calculate hash
+    size_t index = this->hashFunction(key) % this->capacity();
+    size_t i = 0;
+
+    //  probe table
+    while ( i < this->capacity()) {
+        // Calculate index
+        size_t probe = (index + i) % this->capacity();
+        const HashTableBucket& bucket = this->tableData[probe];
+
+        // Stop if ESS
+        if (bucket.getType() == BucketType::ESS) {
+            return nullopt;
+        }
+
+        //  found
+        if (bucket.getType() == BucketType::NORMAL && bucket.getKey() == key) {
+            // Return value
+            return make_optional(bucket.getValue());
+        }
+        i++;
+    }
+
+    // Key not found
+    return nullopt;
 }
 
 int & HashTable::operator[](const string &key) {
