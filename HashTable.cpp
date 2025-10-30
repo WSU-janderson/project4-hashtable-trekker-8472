@@ -34,11 +34,11 @@ bool HashTable::insert(string key, int value) {
     size_t index = hashFunction(key) % capacity();
     size_t firstEAR = capacity(); // hold for EAR entry
 
-    for (size_t i = 0; i < capacity(); ++i) {
+    for (size_t i = 0; i < capacity(); ++i) {//PROBE THROUGH THE TABLE
         size_t probe = (index + i) % capacity();
         HashTableBucket& bucket = tableData[probe];
 
-        if (bucket.getType() == BucketType::NORMAL && bucket.getKey() == key) {
+        if (bucket.getType() == BucketType::NORMAL && bucket.getKey() == key) {//REJECT EXISTING
             // Key already exists — reject insert
             return false;
         }
@@ -49,8 +49,14 @@ bool HashTable::insert(string key, int value) {
         }
 
         if (bucket.getType() == BucketType::ESS) {
-            // ESS found — insert into EAR if remembered, else here
-            size_t target = (firstEAR != capacity()) ? firstEAR : probe;
+            size_t target;
+            if (firstEAR != capacity()) {
+                // PUT IN EAR
+                target = firstEAR;
+            } else {
+                // No EAR found
+                target = probe;
+            }
             HashTableBucket& insertBucket = tableData[target];
             insertBucket.load(key,value); //load values from function
             ++currentSize;
