@@ -83,9 +83,16 @@ optional<int> HashTable::get(const string &key) const {
 }
 
 int & HashTable::operator[](const string &key) {
+
 }
 
 vector<string> HashTable::keys() const {
+    vector<string> keys;
+    for (const auto &bucket : tableData) {
+        if (bucket.isNormal()) {
+            keys.push_back(bucket.getKey());
+        }
+    }
 }
 
 double HashTable::alpha() const {
@@ -153,6 +160,7 @@ void HashTableBucket::load(string key, int value) {
 }
 
 void HashTableBucket::makeEAR() {
+    type = BucketType::EAR;
 }
 
 bool HashTableBucket::isEmpty() const {
@@ -180,9 +188,11 @@ const string & HashTableBucket::getKey() const {
 }
 
 int & HashTableBucket::getValue() {
+    return value;
 }
 
 const int & HashTableBucket::getValue() const {
+    return value;
 }
 
 ostream & operator<<(ostream &os, const HashTable &hashTable) {
