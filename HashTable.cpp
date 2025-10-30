@@ -17,7 +17,7 @@ using namespace std;
 
 HashTable::HashTable(size_t initCapacity) {
 
-     tableData = vector<HashTableBucket>(initCapacity); // Default-constructs tableData
+     tableData = vector<HashTableBucket>(initCapacity); // constructs tableData
      currentSize = 0; // Assigns size
 
     generateNewOffsets(initCapacity); //generates the offsets with the table generation
@@ -51,9 +51,7 @@ bool HashTable::insert(string key, int value) {
             // ESS found — insert into EAR if remembered, else here
             size_t target = (firstEAR != capacity()) ? firstEAR : probe;
             HashTableBucket& insertBucket = tableData[target];
-            insertBucket.setKey(key);
-            insertBucket.setValue(value);
-            insertBucket.setType(BucketType::NORMAL);
+            insertBucket.load(key,value); //load values from function
             ++currentSize;
             return true;
         }
@@ -62,9 +60,7 @@ bool HashTable::insert(string key, int value) {
     // Chain exhausted — insert into EAR if remembered
     if (firstEAR != capacity()) {
         HashTableBucket& insertBucket = tableData[firstEAR];
-        insertBucket.setKey(key);
-        insertBucket.setValue(value);
-        insertBucket.setType(BucketType::NORMAL);
+        insertBucket.load(key,value); //load values from function
         ++currentSize;
         return true;
     }
@@ -157,6 +153,9 @@ HashTableBucket::HashTableBucket(string key, int value) {
 }
 
 void HashTableBucket::load(string key, int value) {
+    this->key = key; //set key
+    this->value = value; //set value
+    this->type = BucketType::NORMAL;
 }
 
 void HashTableBucket::makeEAR() {
