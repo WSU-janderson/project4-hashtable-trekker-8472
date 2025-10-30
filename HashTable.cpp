@@ -106,16 +106,16 @@ void HashTable::resizeAndRehash() {
 
     size_t count = 0;
     for (const auto& bucket : tableData) {
-        if (bucket.getType() == BucketType::NORMAL) {
+        if (bucket.isNormal()) {
             ++count; // count active entries
         }
     }
 
-    vector<HashTableBucket> oldTable(count); // preallocate exact size
+    vector<HashTableBucket> priorTable(count); // preallocate exact size
     size_t index = 0;
     for (const auto& bucket : tableData) {
-        if (bucket.getType() == BucketType::NORMAL) {
-            oldTable[index++] = bucket; // copy active entries
+        if (bucket.isNormal()) {
+            priorTable[index++] = bucket; // copy active entries
         }
     }
 
@@ -124,7 +124,7 @@ void HashTable::resizeAndRehash() {
 
     generateNewOffsets(newCapacity); // update probing logic
 
-    for (const auto& bucket : oldTable) {
+    for (const auto& bucket : priorTable) {
         insert(bucket.getKey(), bucket.getValue()); // reinsert with new capacity
     }
 }
@@ -156,15 +156,27 @@ void HashTableBucket::makeEAR() {
 }
 
 bool HashTableBucket::isEmpty() const {
+    if (type == BucketType::ESS || type == BucketType::EAR) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 bool HashTableBucket::isNormal() const {
+    if (type == BucketType::NORMAL) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 BucketType HashTableBucket::getType() const {
+    return type;
 }
 
 const string & HashTableBucket::getKey() const {
+    return key;
 }
 
 int & HashTableBucket::getValue() {
