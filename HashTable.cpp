@@ -9,9 +9,7 @@
 #include <vector>
 #include <string>
 #include <optional>
-#include <cmath>
 #include <iostream>
-#include <bits/locale_facets_nonio.h>
 
 using namespace std;
 
@@ -20,6 +18,8 @@ HashTable::HashTable(size_t initCapacity) {
 
      tableData = vector<HashTableBucket>(initCapacity); // constructs tableData
      currentSize = 0; // Assigns size
+
+    srand(time(nullptr));//initialize randomness
 
     generateNewOffsets(initCapacity); //generates the offsets with the table generation
 
@@ -89,12 +89,34 @@ bool HashTable::remove(string key) {
             bucket.makeEAR();
             --currentSize;
             return true;
-            }
-        return false;}
+        }
     }
+    return false;
 }
 
 bool HashTable::contains(const string &key) const {
+    size_t index = this->hashFunction(key) % this->capacity();
+    size_t i = 0;
+
+    // Probe table
+    while (i < this->capacity()) {
+        size_t probe = (index + i) % this->capacity();
+        const HashTableBucket& bucket = this->tableData[probe];
+
+        // Stop if ESS (End Search Sequence)
+        if (bucket.getType() == BucketType::ESS) {
+            return false;
+        }
+
+        //  found
+        if (bucket.getType() == BucketType::NORMAL && bucket.getKey() == key) {
+            return true;
+        }
+        i++;
+    }
+
+    // Key not found after exhausting search
+    return false;
 }
 
 optional<int> HashTable::get(const string &key) const {
@@ -136,6 +158,7 @@ vector<string> HashTable::keys() const {
             keys.push_back(bucket.getKey());
         }
     }
+    return keys;
 }
 
 double HashTable::alpha() const {
@@ -180,6 +203,23 @@ void HashTable::resizeAndRehash() {
 }
 
 void HashTable::generateNewOffsets(size_t newCapacity) {
+    // Implement pseudo-random offset generation using the previously seeded rand().
+
+    // offsets vector cleared
+    offsets.clear();
+
+    // initialized offsets
+    for (size_t i = 0; i < newCapacity; ++i) {
+        offsets.push_back(i);
+    }
+
+    //  pseudo-random generation
+    for (size_t i = newCapacity - 1; i > 0; --i) {
+        // Generate random index j such that 0 <= j <= i
+        size_t j = rand() % (i + 1);
+        // Swap offsets[i] and offsets[j]
+        std::swap(offsets[i], offsets[j]);
+    }
 }
 
 size_t HashTable::hashFunction(const string &key) const {

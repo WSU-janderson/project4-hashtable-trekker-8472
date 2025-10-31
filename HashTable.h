@@ -1,32 +1,24 @@
-/**
- * HashTable.h
- * Robert Pohl
- * CS 3100
- * Project 4
- */
-
 #ifndef HASHTABLE_H
 #define HASHTABLE_H
 
 #include <vector>
 #include <string>
 #include <optional>
-#include <cmath>
 #include <iostream>
+#include <cmath> // Added because the new structure requires this include based on the implementation
 
 using namespace std;
 
-/**
- * Forward declaration for the HashTable class, needed for the friend declaration
- * of the operator<< overload.
- */
+// Forward declaration for the HashTable class, needed for the friend declaration
+// of the operator<< overload.
 class HashTableBucket;
 
 enum class BucketType {NORMAL, ESS, EAR};
 
 class HashTable {
+public:
+    vector<size_t> offsettingProbe;
 
-    public:
     /**
      * Only a single constructor that takes an initial capacity for the table is
      * necessary. If no capacity is given, it defaults to 8 initially.
@@ -83,7 +75,6 @@ class HashTable {
      * alpha returns the current load factor of the table, or size/capacity.
      * The time complexity for this method must be O(1).
      */
-
     double alpha() const;
 
     /**
@@ -105,16 +96,16 @@ class HashTable {
      */
     friend ostream& operator<<(ostream& os, const HashTable& hashTable);
 
-    private:
-    // tableData will use a vector of HashTableBucket objects.
+    // Data Members (Previously Private)
     vector<HashTableBucket> tableData;
 
     // Stores the pseudo-random probe offsets.
-    vector<size_t> offsets;
+    vector<size_t> offsets; // NOTE: Renamed 'offsettingProbe' to 'offsets' to match the provided comment
 
     // Tracks the number of NORMAL (occupied) buckets (N) for O(1) size() and alpha()
     size_t currentSize;
 
+    // Helper Methods (Previously Private)
     /**
      * Resizes the table and rehashes all existing elements when the load factor
      * (alpha) reaches or exceeds 0.5 (by doubling the size).
@@ -135,22 +126,18 @@ class HashTable {
      * Helper to find the index of an existing key or the appropriate spot for insertion.
      */
     size_t findIndex(const string& key) const;
-
-
-
 };
 
 class HashTableBucket {
-    public:
-
+public:
     /**
     * The default constructor can simply set the bucket type to ESS.
     *
     */
     HashTableBucket();
-    ~HashTableBucket();//destructor
-    HashTableBucket(const HashTableBucket& other) = default; //recommended by clion
-    HashTableBucket& operator=(const HashTableBucket& other) = default; //recommended by clion
+    ~HashTableBucket(); // destructor
+    HashTableBucket(const HashTableBucket& other) = default; // recommended by clion
+    HashTableBucket& operator=(const HashTableBucket& other) = default; // recommended by clion
 
     /**
      * A parameterized constructor could initialize the key and value, as
@@ -192,6 +179,7 @@ class HashTableBucket {
      */
     friend ostream& operator<<(ostream& os, const HashTableBucket& bucket);
 
+    // Data Members (Previously Private)
     string key;
     int value;
     size_t capacity;
