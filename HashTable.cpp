@@ -198,13 +198,11 @@ int & HashTable::operator[](const string &key) {
         if (bucket.getType() == BucketType::ESS) {
             break; // Key is definitely not in the table
         }
-    }
-
-    // Key not found. Results in undefined behavior as per the contract.
+    }//further behavior undefined
 }
 
 /**
- * keys returns a std::vector with all of the keys currently in the table.
+ * keys returns a std::vector with all of the keys currently in the table. (e.g. normal)
  * The length of the vector should be the same as the size of the hash table.
  */
 vector<string> HashTable::keys() const {
@@ -230,7 +228,7 @@ double HashTable::alpha() const {
 * The time complexity for this algorithm must be O(1).
 */
 size_t HashTable::capacity() const {
-    return tableData.size();
+    return tableData.size();//return from un
 }
 
 /**
