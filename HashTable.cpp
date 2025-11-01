@@ -35,7 +35,7 @@ bool HashTable::insert(string key, int value) {
     size_t firstEAR = capacity(); // hold for EAR entry
 
     for (size_t i = 0; i < capacity(); ++i) {//PROBE THROUGH THE TABLE
-        size_t probe = (index + i) % capacity();
+        size_t probe = (index + offsets[i]) % capacity();// via offsets
         HashTableBucket& bucket = tableData[probe];
 
         if (bucket.getType() == BucketType::NORMAL && bucket.getKey() == key) {//REJECT EXISTING
@@ -80,7 +80,7 @@ bool HashTable::remove(string key) {
     size_t index = hashFunction(key) % capacity();
 
     for (size_t i = 0; i < capacity(); ++i) {
-        size_t probe = (index + i) % capacity();
+        size_t probe = (index + offsets[i]) % capacity();
         HashTableBucket& bucket = tableData[probe];
         if (bucket.getType() == BucketType::ESS) {///breaks from function since no point in continuing
             return false;
@@ -100,7 +100,7 @@ bool HashTable::contains(const string &key) const {
 
     // Probe table
     while (i < this->capacity()) {
-        size_t probe = (index + i) % this->capacity();
+        size_t probe = (index + offsets[i]) % this->capacity();
         const HashTableBucket& bucket = this->tableData[probe];
 
         // Stop if ESS (End Search Sequence)
@@ -127,7 +127,7 @@ optional<int> HashTable::get(const string &key) const {
     //  probe table
     while ( i < this->capacity()) {
         // Calculate index
-        size_t probe = (index + i) % this->capacity();
+        size_t probe = (index + offsets[i]) % this->capacity();
         const HashTableBucket& bucket = this->tableData[probe];
 
         // Stop if ESS
@@ -148,6 +148,24 @@ optional<int> HashTable::get(const string &key) const {
 }
 
 int & HashTable::operator[](const string &key) {
+
+    size_t index = this->hashFunction(key) % this->capacity();
+
+    for (size_t i = 0; i < this->capacity(); ++i) {
+        // Probe using the randomized offset
+        size_t probe = (index + offsets[i]) % this->capacity();
+        HashTableBucket& bucket = this->tableData[probe];
+
+        // 2. If found, return a reference to the existing value
+        if (bucket.getType() == BucketType::NORMAL && bucket.getKey() == key) {
+            return bucket.getValue();
+        }
+
+        // Stop if ESS (End Search Sequence)
+        if (bucket.getType() == BucketType::ESS) {
+            break; // Key is definitely not in the table
+        }
+    }
 
 }
 
@@ -218,7 +236,7 @@ void HashTable::generateNewOffsets(size_t newCapacity) {
         // Generate random index j such that 0 <= j <= i
         size_t j = rand() % (i + 1);
         // Swap offsets[i] and offsets[j]
-        std::swap(offsets[i], offsets[j]);
+        swap(offsets[i], offsets[j]);
     }
 }
 
@@ -231,6 +249,31 @@ size_t HashTable::hashFunction(const string &key) const {
 }
 
 size_t HashTable::findIndex(const string &key) const {
+    size_t index = this->hashFunction(key) % this->capacity();
+    size_t i = 0;
+
+    // Probe table
+    while (i < this->capacity()) {
+        //  probe index
+        size_t probe = (index + offsets[i]) % this->capacity();
+        const HashTableBucket& bucket = this->tableData[probe];
+
+        // Stop if ESS
+        if (bucket.getType() == BucketType::ESS) {
+            // Key not found
+            return this->capacity();
+        }
+
+        // Found the key
+        if (bucket.getType() == BucketType::NORMAL && bucket.getKey() == key) {
+            // Return index
+            return probe;
+        }
+        i++;
+    }
+
+    // Key not found at all
+    return this->capacity(); // same return for ess
 }
 
 // Default constructor
