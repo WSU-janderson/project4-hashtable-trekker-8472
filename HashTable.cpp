@@ -4,16 +4,24 @@
  * CS 3100
  * Project 4
  */
-// https://learn.zybooks.com/zybook/WRIGHTCS3100_5100AndersonFall2025/chapter/9/section/3 poss useful
+// Including necessary headers for functionality
 #include "HashTable.h"
 #include <vector>
 #include <string>
 #include <optional>
 #include <iostream>
+#include <functional>
+#include <utility>
+#include <cstdlib>
+#include <ctime>
+#include <stdexcept>
 
 using namespace std;
 
-
+/**
+ * Only a single constructor that takes an initial capacity for the table is
+ * necessary. If no capacity is given, it defaults to 8 initially.
+ */
 HashTable::HashTable(size_t initCapacity) {
 
      tableData = vector<HashTableBucket>(initCapacity); // constructs tableData
@@ -25,6 +33,12 @@ HashTable::HashTable(size_t initCapacity) {
 
 }
 
+/**
+ * Insert a new key-value pair into the table. Duplicate keys are NOT allowed. The
+ * method should return true if the insertion was successful. If the insertion was
+ * unsuccessful, such as when a duplicate is attempted to be inserted, the method
+ * should return false.
+ */
 bool HashTable::insert(string key, int value) {
 
     if (alpha() > 0.5) { //resize if at least half full
@@ -75,7 +89,10 @@ bool HashTable::insert(string key, int value) {
     return false; // table full, no usable slot
 }
 
-
+/**
+ * If the key is in the table, remove will "erase" the key-value pair from the
+ * table. This might just be marking a bucket as empty-after-remove.
+ */
 bool HashTable::remove(string key) {
     size_t index = hashFunction(key) % capacity();
 
@@ -94,6 +111,10 @@ bool HashTable::remove(string key) {
     return false;
 }
 
+/**
+* contains returns true if the key is in the table and false if the key is not in
+* the table.
+*/
 bool HashTable::contains(const string &key) const {
     size_t index = this->hashFunction(key) % this->capacity();
     size_t i = 0;
@@ -119,6 +140,12 @@ bool HashTable::contains(const string &key) const {
     return false;
 }
 
+/**
+* If the key is found in the table, get will return the value associated with
+* that key. If the key is not in the table, get will return std::nullopt.
+* The method returns an optional<int>, which is a way to denote a method
+* might not have a valid value to return.
+*/
 optional<int> HashTable::get(const string &key) const {
     // Calculate hash
     size_t index = this->hashFunction(key) % this->capacity();
@@ -147,6 +174,12 @@ optional<int> HashTable::get(const string &key) const {
     return nullopt;
 }
 
+/**
+ * The bracket operator lets us access values in the map using a familiar syntax.
+ * It returns a reference to the value, which allows assignment (hashTable["key"] = 1234;).
+ * If the key is not in the table, the situation results in undefined behavior
+ * (no need to address attempts to access keys not in the table).
+ */
 int & HashTable::operator[](const string &key) {
 
     size_t index = this->hashFunction(key) % this->capacity();
@@ -167,8 +200,13 @@ int & HashTable::operator[](const string &key) {
         }
     }
 
+    // Key not found. Results in undefined behavior as per the contract.
 }
 
+/**
+ * keys returns a std::vector with all of the keys currently in the table.
+ * The length of the vector should be the same as the size of the hash table.
+ */
 vector<string> HashTable::keys() const {
     vector<string> keys;
     for (const auto &bucket : tableData) {
@@ -179,18 +217,34 @@ vector<string> HashTable::keys() const {
     return keys;
 }
 
+/**
+ * alpha returns the current load factor of the table, or size/capacity.
+ * The time complexity for this method must be O(1).
+ */
 double HashTable::alpha() const {
     return static_cast<double>(size()) / capacity();//size fill check
 }
 
+/**
+* capacity returns how many buckets in total are in the hash table.
+* The time complexity for this algorithm must be O(1).
+*/
 size_t HashTable::capacity() const {
     return tableData.size();
 }
 
+/**
+ * The size method returns how many key-value pairs are in the hash table.
+ * The time complexity for this method must be O(1).
+ */
 size_t HashTable::size() const {
     return currentSize;
 }
 
+/**
+ * Resizes the table and rehashes all existing elements when the load factor
+ * (alpha) reaches or exceeds 0.5 (by doubling the size).
+ */
 void HashTable::resizeAndRehash() {
 
     size_t newCapacity = capacity() * 2; //resize by double
@@ -220,6 +274,9 @@ void HashTable::resizeAndRehash() {
     }
 }
 
+/**
+ * Generates a new vector of pseudo-random probe offsets based on the new capacity.
+ */
 void HashTable::generateNewOffsets(size_t newCapacity) {
     // Implement pseudo-random offset generation using the previously seeded rand().
 
@@ -240,6 +297,9 @@ void HashTable::generateNewOffsets(size_t newCapacity) {
     }
 }
 
+/**
+ * Custom hash function to convert a string key into a home index.
+ */
 size_t HashTable::hashFunction(const string &key) const {
 
     auto myhash = hash<string>{}; // Create a hash function
@@ -248,6 +308,9 @@ size_t HashTable::hashFunction(const string &key) const {
     return hash; //return value
 }
 
+/**
+ * Helper to find the index of an existing key or the appropriate spot for insertion.
+ */
 size_t HashTable::findIndex(const string &key) const {
     size_t index = this->hashFunction(key) % this->capacity();
     size_t i = 0;
@@ -276,22 +339,52 @@ size_t HashTable::findIndex(const string &key) const {
     return this->capacity(); // same return for ess
 }
 
-// Default constructor
+/**
+ * operator<< allows us to print the contents of our hash table using the normal syntax:
+ * cout << myHashTable << endl;
+ * This is not a method of HashTable, but is declared as a friend for private access.
+ */
+ostream & operator<<(ostream &os, const HashTable &hashTable) {
+}
+----------------------------------------------------------------------------
+
+/**
+* The default constructor can simply set the bucket type to ESS.
+*
+*/
 HashTableBucket::HashTableBucket() : value(0), type(BucketType::ESS) {}
 
+/**
+ * A parameterized constructor could initialize the key and value, as
+ * well as set the bucket type to NORMAL.
+ */
 HashTableBucket::HashTableBucket(string key, int value) {
+    this->key = std::move(key);
+    this->value = value;
+    this->type = BucketType::NORMAL;
 }
 
+/**
+ * A load method could load the key-value pair into the bucket, which
+ * should then also mark the bucket as NORMAL.
+ */
 void HashTableBucket::load(string key, int value) {
     this->key = key; //set key
     this->value = value; //set value
     this->type = BucketType::NORMAL;
 }
 
+/**
+ * Mark the bucket as Empty After Remove (EAR).
+ */
 void HashTableBucket::makeEAR() {
     type = BucketType::EAR;
 }
 
+/**
+ * This method would return whether the bucket is empty, regardless of
+ * if it has had data placed in it or not (i.e., ESS or EAR).
+ */
 bool HashTableBucket::isEmpty() const {
     if (type == BucketType::ESS || type == BucketType::EAR) {
         return true;
@@ -300,6 +393,9 @@ bool HashTableBucket::isEmpty() const {
     }
 }
 
+/**
+ * Checks if the bucket is currently storing a key-value pair (NORMAL).
+ */
 bool HashTableBucket::isNormal() const {
     if (type == BucketType::NORMAL) {
         return true;
@@ -324,8 +420,9 @@ const int & HashTableBucket::getValue() const {
     return value;
 }
 
-ostream & operator<<(ostream &os, const HashTable &hashTable) {
-}
-
+/**
+ * The stream insertion operator could be overloaded to print the
+ * bucket's contents.
+ */
 ostream & operator<<(ostream &os, const HashTableBucket &bucket) {
 }
