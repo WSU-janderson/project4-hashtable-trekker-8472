@@ -282,5 +282,7 @@ int main() {
         cout << "FAILURE: Review Code." << endl;
     }
 
+    cout << "Current Table: " << ht << endl;
+
     return 0;
 }
