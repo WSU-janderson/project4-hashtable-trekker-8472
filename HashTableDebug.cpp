@@ -29,12 +29,24 @@ int main() {
 
     // Modulo index
     size_t index = testHash % initCapacity;
-    cout << "Index after modulo is" << endl;
-    cout << index << endl;
+    cout << "Index after modulo is " << index << endl;
 
     // Insert and verify
     ht.insert("corned beef", 5);
     cout << "Inserted key \"" << firstKey << "\" with value " << firstValue << endl;
+
+    // Size recheck
+    cout << "Hash table after insertion is a size of " << ht.size() << endl;
+
+    // Value Check
+    optional<int> firstResult = ht.get(firstKey); // get ValuefirstKey, returns optional<int>.
+    if (firstResult.has_value()) {
+        cout << "firstKey: \"" << firstKey << "\" value is " <<  firstResult.value() << endl; // Prints success message.
+    } else {
+        cout << "Failure for key value pair" << endl; // Prints an error message.
+    }
+
+    cout << "Table at present state is: " << ht << endl;
 
     cout << "Debug tester complete" << endl;
     return 0;
