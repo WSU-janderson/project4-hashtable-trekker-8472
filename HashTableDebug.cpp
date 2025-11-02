@@ -122,6 +122,19 @@ int main() {
 
     cout << "Current Capacity: " << ht.capacity() << ", Current Size: " << ht.size() << endl;
 
+    cout << ht.alpha() <<endl;
+
+    cout << "Trigger resize next time with fifth." << endl;
+
+    string fifthKey = "browns";
+    int fifthValue = 2;
+
+    ht.insert(fifthKey, fifthValue);
+
+    cout << "Checking size and capacity again." << endl;
+
+    cout << "Current Capacity: " << ht.capacity() << ", Current Size: " << ht.size() << endl;
+
     cout << "Debug tester complete" << endl;
     return 0;
 }
