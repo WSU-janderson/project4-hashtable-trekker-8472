@@ -145,6 +145,9 @@ int main() {
 
     cout << "Testing with third key: " << ht[thirdKey] <<endl;
 
+    ht[thirdKey] = 100;
+
+    cout << "Testing with third key: " << ht[thirdKey] <<endl;
 
     cout << "Debug tester complete" << endl;
 
