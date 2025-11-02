@@ -194,6 +194,7 @@ int main() {
         }
     }
 
+    cout << "Current table: " << ht << endl;
 
     return 0;
 }
