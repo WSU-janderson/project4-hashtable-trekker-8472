@@ -5,4 +5,7 @@ Project description can be found [in the repo](Project4_HashTable.pdf)
 
 Place your complexity analysis below.
 
+
+For the most part, the requested functions are best case T(N) = c constant, there is always the chance you could get immediate results. However, worst case is T(N) = N because there is the possibility one could be required to iterate through the whole table in a linear function. 
+
 ---
