@@ -21,7 +21,7 @@ int main() {
 
     // Raw hash output
     string firstKey = "corned beef";
-    size_t firstValue = 5;
+    int firstValue = 5;
     size_t testHash;
     testHash = ht.hashFunction(firstKey);
     cout << "Raw hash for key \"corned beef\" is ";
@@ -70,11 +70,53 @@ int main() {
 
     cout << "Checking presence of key: " << firstKey << "." << endl;//is what's there there
     if (ht.contains(firstKey)) {
-        cout << firstKey << " is there" << endl;
+        cout << firstKey << " wasn't removed." << endl;
     } else {
-        cout << firstKey << " is not there." << endl;
+        cout << firstKey << " was removed." << endl;
     }
     cout << "Table is: " << ht << endl;
+
+    string secondKey = "roast beef";
+    int secondValue = 15;
+    string thirdKey = "pork";
+    int thirdValue = 8;
+
+    cout << "Inserting firstKey plus secondKey and thirdKey." << endl;
+    ht.insert(firstKey, firstValue);
+    ht.insert(secondKey, secondValue);
+    ht.insert(thirdKey, thirdValue);
+
+    // Check all three keys
+    optional<int> result1 = ht.get(firstKey);
+    if (result1.has_value()) {
+        cout << "firstKey: \"" << firstKey << "\" value is " <<  result1.value() << endl; // Prints success message.
+    } else {
+        cout << "Failure for key value pair " << firstKey << endl; // Prints an error message.
+    }
+
+    optional<int> result2 = ht.get(secondKey);
+    if (result2.has_value()) {
+        cout << "secondKey: \"" << secondKey << "\" value is " <<  result2.value() << endl; // Prints success message.
+    } else {
+        cout << "Failure for key value pair " << secondKey << endl; // Prints an error message.
+    }
+
+    optional<int> result3 = ht.get(thirdKey);
+    if (result3.has_value()) {
+        cout << "thirdKey: \"" << thirdKey << "\" value is " <<  result3.value() << endl; // Prints success message.
+    } else {
+        cout << "Failure for key value pair " << thirdKey << endl; // Prints an error message.
+    }
+
+
+    cout << "Current Capacity: " << ht.capacity() << ", Current Size: " << ht.size() << endl;
+
+    cout << "Need at least one more insert to call Resize and associated functions." << endl;
+
+    string fourthKey = "sausage";
+    int fourthValue = 1;
+
+    ht.insert(fourthKey, fourthValue);
 
     cout << "Debug tester complete" << endl;
     return 0;
