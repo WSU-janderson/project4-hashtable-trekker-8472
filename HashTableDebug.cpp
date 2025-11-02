@@ -13,26 +13,28 @@ using namespace std;
 int main() {
     cout << "Starting hash table debug tester" << endl;
 
-    // Test 1: Basic construction
+    // Basic construction
     size_t initCapacity = 8;
     HashTable ht(initCapacity);
     cout << "Hash table constructed with capacity " << initCapacity << endl;
+    cout << "Hash table constructed with a size of " << ht.size() << endl;
 
-    // Test 2: Raw hash output
-    string key = "corned beef";
+    // Raw hash output
+    string firstKey = "corned beef";
+    size_t firstValue = 5;
     size_t testHash;
-    testHash = ht.hashFunction(key);
-    cout << "Raw hash for key \"corned beef\" is " << endl;
-    cout << testHash << endl;
+    testHash = ht.hashFunction(firstKey);
+    cout << "Raw hash for key \"corned beef\" is ";
+    cout << testHash << "." << endl;
 
-    // Test 3: Modulo index
+    // Modulo index
     size_t index = testHash % initCapacity;
     cout << "Index after modulo is" << endl;
     cout << index << endl;
 
-    // Test 4: Insert and verify
+    // Insert and verify
     ht.insert("corned beef", 5);
-    cout << "Inserted key \"corned beef\" with value five" << endl;
+    cout << "Inserted key \"" << firstKey << "\" with value " << firstValue << endl;
 
     cout << "Debug tester complete" << endl;
     return 0;

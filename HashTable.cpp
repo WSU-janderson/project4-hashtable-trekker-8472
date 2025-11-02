@@ -343,8 +343,18 @@ size_t HashTable::findIndex(const string &key) const {
  * This is not a method of HashTable, but is declared as a friend for private access.
  */
 ostream & operator<<(ostream &os, const HashTable &hashTable) {
+    os << "Here is your hash table: {\n";
+    size_t i = 0;
+    while (i < hashTable.capacity()) {
+
+        os << "  Bucket " << i << " is "; // show bucket number
+        os << hashTable.tableData[i] << "\n";// show bucket contents
+
+        ++i;
+    }
+    os << "}";
+    return os;
 }
-----------------------------------------------------------------------------
 
 /**
 * The default constructor can simply set the bucket type to ESS.
@@ -423,4 +433,15 @@ const int & HashTableBucket::getValue() const {
  * bucket's contents.
  */
 ostream & operator<<(ostream &os, const HashTableBucket &bucket) {
+    if (bucket.isNormal()) {
+        // Print key and value if the bucket is occupied
+        os << "Bucket key: " << bucket.key << " Bucket Value: " << bucket.value << endl;
+    } else if (bucket.getType() == BucketType::EAR) {
+        // Indicate the bucket is Empty After Remove
+        os << "Bucket type is Empty After Removal." << endl;
+    } else {
+        // Indicate the bucket is Empty Search Sequence (ESS)
+        os << "Bucket type is Empty Since Start." << endl;
+    }
+    return os;
 }
