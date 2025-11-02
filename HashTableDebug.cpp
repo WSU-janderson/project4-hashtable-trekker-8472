@@ -223,7 +223,7 @@ int main() {
         cout << "FAILURE: Correct the function code." << endl;
     }
 
-        size_t currentCap = ht.capacity();
+    size_t currentCap = ht.capacity();
     cout << "Current Capacity: " << currentCap << ", Current Size: " << ht.size() << endl;
 
     // Define keys that should collide at a capacity of 16 (or whatever the current capacity is)
@@ -232,17 +232,21 @@ int main() {
     string keyBravo = "Hammer"; // Collision Next
     string keyCharlie = "Saw";    // Insert into EAR
     string keyDelta = "Pliers";   // Simple Insert
+    int valueAlpha = 100;
+    int valueBravo = 200;
+    int valueCharlie = 300;
+    int valueDelta = 500;
 
     // 1. Setup the chain (Key Alpha and Key Bravo)
     cout << "1. Collides and EARs..." << endl;
-    ht.insert(keyAlpha, 100);
-    ht.insert(keyBravo, 200); // keyBravo should be displaced/collides
+    ht.insert(keyAlpha, valueAlpha);
+    ht.insert(keyBravo, valueBravo); // keyBravo should be displaced/collides
 
-    size_t keyAlpha_Index = ht.hashFunction(keyAlpha) % currentCap;
-    size_t keyBravo_Index = ht.hashFunction(keyBravo) % currentCap;
+    size_t keyAlphaIndex = ht.hashFunction(keyAlpha) % currentCap;
+    size_t keyBravoIndex = ht.hashFunction(keyBravo) % currentCap;
 
-    cout << "Key Alpha: " << keyAlpha << " index: " << keyAlpha_Index << endl;
-    cout << "Key Bravo:" << keyBravo << " index: " << keyBravo_Index << " Displaced" << endl;
+    cout << "Key Alpha: " << keyAlpha << " index: " << keyAlphaIndex << endl;
+    cout << "Key Bravo:" << keyBravo << " index: " << keyBravoIndex << " Displaced" << endl;
 
     size_t currentSizeTest = ht.size();
     cout << "Size before EARs: " << ht.size() << endl;
@@ -256,6 +260,27 @@ int main() {
     }
 
     cout << "Size after EARs: " << ht.size() << endl;
+
+    cout << "Current Table: " << ht << endl;
+
+    size_t sizeBeforeESSInsert = ht.size();
+    ht.insert(keyCharlie, valueCharlie);
+
+    if (ht.contains(keyCharlie) && ht.size() == sizeBeforeESSInsert + 1) {
+        cout << "SUCCESS: inserted into ESS, size increased; now: " << ht.size() << "." << endl;
+    } else {
+        cout << "FAILURE: Review Code" << endl;
+    }
+
+    size_t sizeBeforeEARInsert = ht.size();
+
+    bool insertCheck = ht.insert(keyDelta, valueDelta);
+
+    if (insertCheck && ht.contains(keyDelta) && ht.size() == sizeBeforeEARInsert + 1) {
+        cout << "SUCCESS: Key size increased to " << ht.size() << " after EAR insertion." << endl;
+    } else {
+        cout << "FAILURE: Review Code." << endl;
+    }
 
     return 0;
 }
