@@ -46,7 +46,35 @@ int main() {
         cout << "Failure for key value pair" << endl; // Prints an error message.
     }
 
-    cout << "Table at present state is: " << ht << endl;
+    cout << "Table is: " << ht << endl;
+
+    cout << "Checking presence of key: " << firstKey << "." << endl;//is what's there there
+    if (ht.contains(firstKey)) {
+        cout << "It is there" << endl;
+    } else {
+        cout << "It is not there." << endl;
+    }
+
+    string absentKey = "sun screen";
+    cout << "Checking presence of key: " << absentKey << "." << endl;
+    if (!ht.contains(absentKey)) {
+        cout << "It is properly not there." << endl;
+    } else {
+        cout << "It is improperly there" << endl;
+    }
+
+    cout << "Removing lone key, firstKey." << endl;
+
+    bool removeCheck = ht.remove(firstKey);
+    cout << "remove() returned: " << (removeCheck ? "true" : "false") << endl;
+
+    cout << "Checking presence of key: " << firstKey << "." << endl;//is what's there there
+    if (ht.contains(firstKey)) {
+        cout << firstKey << " is there" << endl;
+    } else {
+        cout << firstKey << " is not there." << endl;
+    }
+    cout << "Table is: " << ht << endl;
 
     cout << "Debug tester complete" << endl;
     return 0;
