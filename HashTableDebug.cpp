@@ -168,5 +168,15 @@ int main() {
 
     cout << "Current Capacity: " << ht.capacity() << ", Current Size: " << ht.size() << endl;
 
+    cout << "Testing vector functionality." << endl;
+
+    vector<string> expectedKeys = {firstKey, secondKey, thirdKey, fourthKey, fifthKey, sixthKey};
+
+    vector<string> retrievedKeys = ht.keys();
+
+    if (retrievedKeys.size() != expectedKeys.size()) {
+        cout << "Wrong number of keys in vector." << endl;
+    }
+
     return 0;
 }
