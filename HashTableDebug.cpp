@@ -162,5 +162,11 @@ int main() {
     //
     // cout << "Debug tester complete" << endl;
 
+    cout << "Calling regular insertion" << endl;
+
+    ht.insert(sixthKey, sixthValue);
+
+    cout << "Current Capacity: " << ht.capacity() << ", Current Size: " << ht.size() << endl;
+
     return 0;
 }
