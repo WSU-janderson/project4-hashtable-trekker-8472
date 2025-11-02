@@ -135,7 +135,7 @@ public:
     *
     */
     HashTableBucket();
-    ~HashTableBucket(); // destructor
+    ~HashTableBucket() = default; // destructor
     HashTableBucket(const HashTableBucket& other) = default; // recommended by clion
     HashTableBucket& operator=(const HashTableBucket& other) = default; // recommended by clion
 

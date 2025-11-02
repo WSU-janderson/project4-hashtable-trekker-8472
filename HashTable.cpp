@@ -14,7 +14,6 @@
 #include <utility>
 #include <cstdlib>
 #include <ctime>
-#include <stdexcept>
 
 using namespace std;
 
@@ -361,6 +360,8 @@ ostream & operator<<(ostream &os, const HashTable &hashTable) {
 *
 */
 HashTableBucket::HashTableBucket() : value(0), type(BucketType::ESS) {}
+
+
 
 /**
  * A parameterized constructor could initialize the key and value, as
