@@ -124,16 +124,22 @@ int main() {
 
     cout << ht.alpha() <<endl;
 
+    int currentCapacity = ht.capacity();
+
     cout << "Trigger resize next time with fifth." << endl;
 
     string fifthKey = "browns";
-    int fifthValue = 2;
+    int fifthValue = 500;
+
+    int newCapacity;
 
     ht.insert(fifthKey, fifthValue);
 
+    newCapacity = ht.capacity();
+
     cout << "Checking size and capacity again." << endl;
 
-    cout << "Current Capacity: " << ht.capacity() << ", Current Size: " << ht.size() << endl;
+    cout << "Previous Capacity: " << currentCapacity << " New Capacity: " << newCapacity << endl;
 
     cout << "Debug tester complete" << endl;
     return 0;

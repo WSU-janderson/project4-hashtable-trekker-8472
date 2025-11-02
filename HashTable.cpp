@@ -40,10 +40,6 @@ HashTable::HashTable(size_t initCapacity) {
  */
 bool HashTable::insert(string key, int value) {
 
-    if (alpha() > 0.5) { //resize if at least half full
-        resizeAndRehash();
-    }
-
     size_t index = hashFunction(key) % capacity();
     size_t firstEAR = capacity(); // hold for EAR entry
 
@@ -73,6 +69,11 @@ bool HashTable::insert(string key, int value) {
             HashTableBucket& insertBucket = tableData[target];
             insertBucket.load(key,value); //load values from function
             ++currentSize;
+
+            if (alpha() > 0.5) { //resize if at least half full
+                resizeAndRehash();
+            }
+
             return true;
         }
     }
