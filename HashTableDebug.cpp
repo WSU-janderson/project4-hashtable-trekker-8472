@@ -4,6 +4,7 @@
  * Write your tests in this file
  * Project 4
  */
+#include <algorithm>
 #include <iostream>
 #include "HashTable.h"
 
@@ -176,6 +177,21 @@ int main() {
 
     if (retrievedKeys.size() != expectedKeys.size()) {
         cout << "Wrong number of keys in vector." << endl;
+    } else {
+        cout << "Successfully retrieved vector." << endl;
+    }
+
+    cout << "Testing that the correct keys are returned using vector method sort." << endl;
+
+    sort(retrievedKeys.begin(), retrievedKeys.end());
+    sort(expectedKeys.begin(), expectedKeys.end());
+
+    for (int i = 0; i < retrievedKeys.size(); ++i) {
+        if (retrievedKeys[i] != expectedKeys[i]) {
+            cout << "Wrong value for key " << retrievedKeys[i] << endl;
+        } else {
+            cout << "Successfully retrieved match key " << retrievedKeys[i] << endl;
+        }
     }
 
     return 0;
