@@ -137,10 +137,16 @@ int main() {
 
     newCapacity = ht.capacity();
 
-    cout << "Checking size and capacity again." << endl;
+    cout << "Checking size and capacity again." << endl; //one of the previous test failed
 
     cout << "Previous Capacity: " << currentCapacity << " New Capacity: " << newCapacity << endl;
 
+    cout << "Testing array like function []." << endl;
+
+    cout << "Testing with third key: " << ht[thirdKey] <<endl;
+
+
     cout << "Debug tester complete" << endl;
+
     return 0;
 }
