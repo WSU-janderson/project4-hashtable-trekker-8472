@@ -118,6 +118,10 @@ int main() {
 
     ht.insert(fourthKey, fourthValue);
 
+    cout << "Checking size and capacity again." << endl;
+
+    cout << "Current Capacity: " << ht.capacity() << ", Current Size: " << ht.size() << endl;
+
     cout << "Debug tester complete" << endl;
     return 0;
 }
