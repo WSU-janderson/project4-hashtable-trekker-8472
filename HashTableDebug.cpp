@@ -242,7 +242,7 @@ int main() {
     size_t keyBravo_Index = ht.hashFunction(keyBravo) % currentCap;
 
     cout << "Key Alpha: " << keyAlpha << " index: " << keyAlpha_Index << endl;
-    cout << "Key Bravo:" << keyBravo << " index: " << keyBravo_Index << " Displaced to new slot) << endl;
+    cout << "Key Bravo:" << keyBravo << " index: " << keyBravo_Index << " Displaced" << endl;
 
     size_t currentSizeTest = ht.size();
     cout << "Size before EARs: " << ht.size() << endl;
@@ -254,6 +254,8 @@ int main() {
     } else {
         cout << "FAILURE: Check Code" << endl;
     }
+
+
 
     return 0;
 }
