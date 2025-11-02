@@ -154,13 +154,13 @@ int main() {
     int sixthValue = 10;
     string sixthKey = "Waffle House browns done all the way";
 
-    cout << "Size prior to call: " << ht.size() << endl;
-
-    ht[sixthKey] = sixthValue;
-
-    cout << "Size post call: " << ht.size() << endl;
-
-    cout << "Debug tester complete" << endl;
+    // cout << "Size prior to call: " << ht.size() << endl;
+    //
+    // ht[sixthKey] = sixthValue;
+    //
+    // cout << "Size post call: " << ht.size() << endl;
+    //
+    // cout << "Debug tester complete" << endl;
 
     return 0;
 }
