@@ -196,5 +196,64 @@ int main() {
 
     cout << "Current table: " << ht << endl;
 
+    cout << "Deep copy function test: " << endl;
+
+    int firstKeySourceValue = ht.get(firstKey).value();
+
+    // 1. Test Copy
+    cout << "\n1. Testing Copy Constructor: HashTable htCopy = ht;" << endl;
+    HashTable htCopy = ht; // Uses copy constructor
+
+    if (htCopy.size() == ht.size() && htCopy.capacity() == ht.capacity()) {
+        cout << "Success" << endl;
+    }
+    else {
+        cout << "Failure" << endl;
+    }
+
+    cout << "Modify value test." << endl;
+    int firstTestKeyValue =8675309;
+
+    ht[firstKey] = firstTestKeyValue;
+
+    optional<int> copyCheck1 = htCopy.get(firstKey);
+    if (copyCheck1.has_value() && copyCheck1.value() == firstKeySourceValue) {
+        cout << "SUCCESS: \"" << firstKey << "\" is unchanged." << endl;
+    } else {
+        cout << "FAILURE: Correct the function code." << endl;
+    }
+
+        size_t currentCap = ht.capacity();
+    cout << "Current Capacity: " << currentCap << ", Current Size: " << ht.size() << endl;
+
+    // Define keys that should collide at a capacity of 16 (or whatever the current capacity is)
+    // The actual hash values don't matter as long as they probe together.
+    string keyAlpha = "Wrench"; // Collision Start
+    string keyBravo = "Hammer"; // Collision Next
+    string keyCharlie = "Saw";    // Insert into EAR
+    string keyDelta = "Pliers";   // Simple Insert
+
+    // 1. Setup the chain (Key Alpha and Key Bravo)
+    cout << "1. Collides and EARs..." << endl;
+    ht.insert(keyAlpha, 100);
+    ht.insert(keyBravo, 200); // keyBravo should be displaced/collides
+
+    size_t keyAlpha_Index = ht.hashFunction(keyAlpha) % currentCap;
+    size_t keyBravo_Index = ht.hashFunction(keyBravo) % currentCap;
+
+    cout << "Key Alpha: " << keyAlpha << " index: " << keyAlpha_Index << endl;
+    cout << "Key Bravo:" << keyBravo << " index: " << keyBravo_Index << " Displaced to new slot) << endl;
+
+    size_t currentSizeTest = ht.size();
+    cout << "Size before EARs: " << ht.size() << endl;
+
+    ht.remove(keyBravo);
+
+    if (!ht.contains(keyBravo) && ht.size() == currentSizeTest - 1) {
+        cout << "SUCCESS: Key Bravo removed. EAR slot created." << endl;
+    } else {
+        cout << "FAILURE: Check Code" << endl;
+    }
+
     return 0;
 }
