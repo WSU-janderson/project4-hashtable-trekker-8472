@@ -187,12 +187,13 @@ int main() {
     sort(expectedKeys.begin(), expectedKeys.end());
 
     for (int i = 0; i < retrievedKeys.size(); ++i) {
-        if (retrievedKeys[i] != expectedKeys[i]) {
+        if (retrievedKeys[i] != expectedKeys[i]) { //remember that "W" is before "w" after run
             cout << "Wrong value for key " << retrievedKeys[i] << endl;
         } else {
             cout << "Successfully retrieved match key " << retrievedKeys[i] << endl;
         }
     }
+
 
     return 0;
 }
