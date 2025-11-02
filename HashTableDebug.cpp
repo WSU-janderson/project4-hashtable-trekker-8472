@@ -255,7 +255,7 @@ int main() {
         cout << "FAILURE: Check Code" << endl;
     }
 
-
+    cout << "Size after EARs: " << ht.size() << endl;
 
     return 0;
 }
